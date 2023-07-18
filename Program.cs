@@ -2,6 +2,7 @@
 using OPCAutomation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 
@@ -77,21 +78,22 @@ public class Program
         group = KepGroups.Add("test");
         group.IsSubscribed = true; //是否为订阅
         group.UpdateRate = 200;    //刷新频率
-        group.DataChange += Group_DataChange; //组内数据变化的回调函数
-        group.AsyncReadComplete += Group_AsyncReadComplete;  //异步读取完成回调
+     //   group.DataChange += Group_DataChange; //组内数据变化的回调函数 数据变化时，自动触发函数
+        group.AsyncReadComplete += Group_AsyncReadComplete;  //异步读取完成回调 
         group.AsyncWriteComplete += Group_AsyncWriteComplete;  //异步写入完成回调
         group.AsyncCancelComplete += Group_AsyncCancelComplete; //异步取消读取、写入回调
 
 
-        OPCList.Add(new Item()
-        {
-            ItemID = "通道 1.设备 1.标记 1"
-        });
+
+          OPCList.Add(new Item()
+          {
+              ItemID = "通道 1.设备 1.标记 1"
+          });
         //模拟器示例.函数.Ramp4
-        OPCList.Add(new Item()
-        {
-            ItemID = "模拟器示例.函数.Ramp4"
-        });
+         OPCList.Add(new Item()
+         {
+             ItemID = "模拟器示例.函数.Ramp4"//此值kepserver不能修改
+         });
         
         int count = OPCList.Count;
 
@@ -111,32 +113,59 @@ public class Program
 
         Array SeverHandles;
         Array Errors;
+        ////Values.SetValue(222,0);
+        //Values.SetValue(333,1);
+       // Array Rvalues = Values.ToArray();
+        int Tid = 0;
+        int Cid = 0;
 
 
         group.OPCItems.AddItems(count, ref ItemID, ref ClientHandle, out SeverHandles, out Errors);
-
+        
+        //读取 一直
+        // while (true)
+        // {
+        //     group.AsyncRead(count, ref SeverHandles,out  Errors, Tid, out Cid);
+        // }
+       // OPCItem bItem=group.OPCItems.GetOPCItem(int.Parse(SeverHandles.GetValue(2).ToString()));
+        int[] temp = new int[2] { 0, int.Parse(SeverHandles.GetValue(1).ToString()) };
+        Array serverHandles = (Array)temp;
+        
+        object[] valueTemp = new object[2] { "", "700" };
+        Array values = (Array)valueTemp;
+        
+        group.AsyncWrite(1,ref serverHandles,ref values,out Errors,Tid,out Cid );//读取   
+        group.AsyncRead(count, ref SeverHandles,out  Errors, Tid, out Cid);//写入
+       // group.AsyncCancel(Cid);//取消
         Console.ReadKey();
     }
 
     private static void Group_AsyncCancelComplete(int CancelID)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("AsyncCancel");
     }
 
     private static void Group_AsyncWriteComplete(int TransactionID, int NumItems, ref Array ClientHandles, ref Array Errors)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("AsyncWrite");
     }
 
     private static void Group_AsyncReadComplete(int TransactionID, int NumItems, ref Array ClientHandles, ref Array ItemValues, ref Array Qualities, ref Array TimeStamps, ref Array Errors)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("AsyncReadComplete");
+        GetData(NumItems, ClientHandles, ItemValues, Qualities, TimeStamps);
     }
 
     private static void Group_DataChange(int TransactionID, int NumItems, ref Array ClientHandles, ref Array ItemValues, ref Array Qualities, ref Array TimeStamps)
     {
+        Console.WriteLine("DataChange");
         //为了测试，所以加了控制台的输出，来查看事物ID号
         //Console.WriteLine("********"+TransactionID.ToString()+"*********");
+        GetData(NumItems, ClientHandles, ItemValues, Qualities, TimeStamps);
+    }
+
+    private static void GetData(int NumItems,  Array ClientHandles,  Array ItemValues,  Array Qualities,  Array TimeStamps)
+    {
         for (int i = 1; i <= NumItems; i++)
         {
             string a = ItemValues.GetValue(i).ToString();

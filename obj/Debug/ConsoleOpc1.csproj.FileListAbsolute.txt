@@ -8,3 +8,13 @@ D:\HALCON\ComDe\ConsoleOpc1\bin\Debug\ConsoleOpc1.exe
 D:\HALCON\ComDe\ConsoleOpc1\bin\Debug\ConsoleOpc1.pdb
 D:\HALCON\ComDe\ConsoleOpc1\obj\Debug\ConsoleOpc1.exe
 D:\HALCON\ComDe\ConsoleOpc1\obj\Debug\ConsoleOpc1.pdb
+D:\HALCON\ComDe\OPC\bin\Debug\ConsoleOpc1.exe.config
+D:\HALCON\ComDe\OPC\bin\Debug\ConsoleOpc1.exe
+D:\HALCON\ComDe\OPC\bin\Debug\ConsoleOpc1.pdb
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.csproj.AssemblyReference.cache
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.csproj.SuggestedBindingRedirects.cache
+D:\HALCON\ComDe\OPC\obj\Debug\Interop.OPCAutomation.dll
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.csproj.ResolveComReference.cache
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.csproj.CoreCompileInputs.cache
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.exe
+D:\HALCON\ComDe\OPC\obj\Debug\ConsoleOpc1.pdb
